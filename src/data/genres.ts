@@ -1,0 +1,1 @@
+export const genres = ['Action', 'Adventure', 'RPG', 'Shooter', 'Strategy', 'Fighting', 'Simulation', 'Horror', 'Puzzle', 'Racing', 'Sports', 'Indie'];
