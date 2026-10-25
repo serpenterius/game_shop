@@ -1,11 +1,12 @@
 import type { gameInfo } from "./gameInfo"
 
 export type Catalogue = {
-    games: gameInfo[],
+    games: gameInfo[] | [],
     searchQuery: string,
     selectedGenres: string[] | [],
     priceRange: {
         leftPointer: number,
         rightPointer: number
-    }
+    },
+    cartList: gameInfo[] | []
 }

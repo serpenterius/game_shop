@@ -5,6 +5,7 @@ import '../css/style.css'
 import GameCard from '../components/gameCard'
 import ModalPage from '../components/modalPage.tsx'
 import ModalFilters from '../components/modalFilters.tsx'
+import { Cart } from '../components/cart.tsx'
 
 import { games } from '../data/games.ts'
 import { genres } from '../data/genres.ts'
@@ -24,19 +25,35 @@ function HomePage() {
         priceRange: {
             leftPointer: 0,
             rightPointer: 0
-        }
+        },
+        cartList: []
     });
     const [modalWindows, setModalWindows] = useState<ModalWindows>({
         modalGameInfo: null,
         isGameCardVisible: false,
-        isFiltersVisible: false
+        isFiltersVisible: false,
+        isCartVisible: false
     });
 
     const filteredGames = getFilteredGames(catalogue.games, catalogue.searchQuery, catalogue.selectedGenres);
 
     let gamesCards = filteredGames.map((game, index) => {
-        return <GameCard key={index} title={game.title} price={game.price} img={game.img} id={game.id} openModal={openModal} />
+        return <GameCard key={index} title={game.title} price={game.price} img={game.img} id={game.id} openModal={openModal} addToCart={addToCart} />
     })
+
+    function addToCart(e: React.MouseEvent<HTMLButtonElement>, id: number) {
+        e.stopPropagation();
+        const gameToCart: gameInfo | undefined = games.find(item => item.id === id);
+        if(gameToCart !== undefined) {
+            const result: gameInfo[] = [...catalogue.cartList, gameToCart];
+            setCatalogue({...catalogue, cartList: result});
+        }
+    }
+
+    function deleteFromCart(id: number) {
+        const filteredData = catalogue.cartList.filter(item => item.id !== id);
+        setCatalogue({...catalogue, cartList: filteredData});
+    }
 
     function openModal(id: number) {
         const game = (catalogue.games).find(game => game.id === id);
@@ -63,12 +80,14 @@ function HomePage() {
         <div className='wrapper'>
             <div className="nav">
                 <h1>Game Store</h1>
-                <button className='cart'>Cart</button>
+                <button onClick={() => setModalWindows({...modalWindows, isFiltersVisible: false, isCartVisible: !modalWindows.isCartVisible})} className='cart'>Cart</button>
+
+                <Cart isVisible={modalWindows.isCartVisible} cartList={catalogue.cartList} deleteFromCart={deleteFromCart} />
             </div>
 
             <div className="search">
                 {/* <input onChange={(e) => searchGame(e, games)} type="text" /> */}
-                <input onChange={(e) => setCatalogue({...catalogue, searchQuery: e.target.value})} type="text" />
+                <input value={catalogue.searchQuery} onChange={(e) => setCatalogue({...catalogue, searchQuery: e.target.value})} type="text" />
                 <button onClick={() => setModalWindows({...modalWindows, isFiltersVisible: !modalWindows.isFiltersVisible})}>Filters</button>
 
                 <ModalFilters isOpen={modalWindows.isFiltersVisible} catalogue={catalogue} setCatalogue={setCatalogue} />

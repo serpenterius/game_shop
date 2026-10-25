@@ -19,7 +19,7 @@ function ModalFilters({isOpen, catalogue, setCatalogue} : Props) {
         return (
             <div className='filter_genres_btns'>
                 <p key={index}>{item}</p>
-                <ToggleSwitch genre={item} catalogue={catalogue} setCatalogue={setCatalogue} />
+                <ToggleSwitch value={catalogue.selectedGenres} genre={item} catalogue={catalogue} setCatalogue={setCatalogue} />
             </div>
         )
     })
@@ -30,7 +30,10 @@ function ModalFilters({isOpen, catalogue, setCatalogue} : Props) {
                 {...toggleSwitchers}
             </div>
             <div className="filter_prices">
-                
+                <input type="range"
+                        min={0}
+                        max={300}
+                        step={1} />
             </div>
         </div>
     )

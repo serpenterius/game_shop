@@ -3,14 +3,14 @@ import type { gameInfo } from "../types/gameInfo";
 import GameCard from "../components/gameCard";
 
 export function getFilteredGames(games: gameInfo[], searchQuery: string, selectedGenres: string[]) {
-    let gamesList: gameInfo[] = [];
+    let gamesList: gameInfo[] = games;
 
     if(searchQuery.trim()) {
-        gamesList = games.filter(item => (item.title.toLowerCase()).startsWith(searchQuery.toLowerCase()) === true);            
+        gamesList = gamesList.filter(item => (item.title.toLowerCase()).startsWith(searchQuery.toLowerCase()) === true);            
     }
 
     if(selectedGenres.length > 0) {
-    gamesList = games.filter(game =>
+    gamesList = gamesList.filter(game =>
         game.genres.some(genre =>
             selectedGenres.includes(genre)
         )   

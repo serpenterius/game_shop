@@ -3,13 +3,17 @@ import { useState, type Dispatch, type SetStateAction } from "react"
 import type { Catalogue } from "../types/catalogue";
 
 type Props = {
+    value: string[],
     genre: string,
     catalogue: Catalogue;
     setCatalogue: Dispatch<SetStateAction<Catalogue>>
 }
 
-function ToggleSwitch({genre, catalogue, setCatalogue}: Props) {
-    const [isChecked, setIsChecked] = useState(false);
+function ToggleSwitch({value, genre, catalogue, setCatalogue}: Props) {
+    const [isChecked, setIsChecked] = useState(() => {
+        return value.includes(genre.toLowerCase());
+    });
+
 
     function handleToggle(checkboxBoolean: boolean, genre: string) {
         let genres: string[] = catalogue.selectedGenres;
