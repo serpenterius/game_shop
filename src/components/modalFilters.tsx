@@ -17,8 +17,8 @@ function ModalFilters({isOpen, catalogue, setCatalogue} : Props) {
 
     const toggleSwitchers = genres.map((item, index) => {
         return (
-            <div className='filter_genres_btns'>
-                <p key={index}>{item}</p>
+            <div key={index} className='filter_genres_btns'>
+                <p>{item}</p>
                 <ToggleSwitch value={catalogue.selectedGenres} genre={item} catalogue={catalogue} setCatalogue={setCatalogue} />
             </div>
         )

@@ -8,7 +8,6 @@ import ModalFilters from '../components/modalFilters.tsx'
 import { Cart } from '../components/cart.tsx'
 
 import { games } from '../data/games.ts'
-import { genres } from '../data/genres.ts'
 
 import type { gameInfo } from '../types/gameInfo.ts'
 import type { Catalogue } from '../types/catalogue.ts'
@@ -37,8 +36,8 @@ function HomePage() {
 
     const filteredGames = getFilteredGames(catalogue.games, catalogue.searchQuery, catalogue.selectedGenres);
 
-    let gamesCards = filteredGames.map((game, index) => {
-        return <GameCard key={index} title={game.title} price={game.price} img={game.img} id={game.id} openModal={openModal} addToCart={addToCart} />
+    let gamesCards = filteredGames.map(game => {
+        return <GameCard key={game.id} title={game.title} price={game.price} img={game.img} id={game.id} openModal={openModal} addToCart={addToCart} />
     })
 
     function addToCart(e: React.MouseEvent<HTMLButtonElement>, id: number) {

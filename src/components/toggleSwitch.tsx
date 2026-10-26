@@ -10,21 +10,21 @@ type Props = {
 }
 
 function ToggleSwitch({value, genre, catalogue, setCatalogue}: Props) {
-    const [isChecked, setIsChecked] = useState(() => {
-        return value.includes(genre.toLowerCase());
-    });
 
+    const name = genre.toLowerCase();
+    const isChecked = value.includes(name);
 
-    function handleToggle(checkboxBoolean: boolean, genre: string) {
-        let genres: string[] = catalogue.selectedGenres;
-        setIsChecked(checkboxBoolean);
-
-        if(checkboxBoolean) {
-            genres.push(genre.toLowerCase());
-            setCatalogue({...catalogue, selectedGenres: genres})
+    function handleToggle() {
+        if(isChecked) {
+            setCatalogue({
+                ...catalogue,
+                selectedGenres: catalogue.selectedGenres.filter(item => item !== name)
+            })
         } else {
-            genres = genres.filter(item => genre.toLowerCase() !== item);
-            setCatalogue({...catalogue, selectedGenres: genres})
+            setCatalogue({
+                ...catalogue,
+                selectedGenres: [...catalogue.selectedGenres, name]
+            })
         }
     }
 
@@ -32,7 +32,7 @@ function ToggleSwitch({value, genre, catalogue, setCatalogue}: Props) {
         <label className="toggle">
             <input type="checkbox"
                     checked={isChecked}
-                    onChange={(e) => handleToggle(e.target.checked, genre)}/>
+                    onChange={(e) => handleToggle()}/>
             <span className="slider"></span>
         </label>
     )

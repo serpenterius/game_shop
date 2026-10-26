@@ -9,8 +9,8 @@ type Props = {
 export function Cart({isVisible, cartList, deleteFromCart}: Props) {
     if(!isVisible) return null
 
-    let result = cartList.map(item => {
-        return <div key={Math.random()} className="cart_game">
+    let result = cartList.map((item, index) => {
+        return <div key={index} className="cart_game">
             <p>{item.title}</p>
             <p>{item.price}$</p>
             <button onClick={() => deleteFromCart(item.id)}>X</button>
