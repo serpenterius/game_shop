@@ -1,4 +1,4 @@
-import { useState, type Dispatch, type SetStateAction } from "react"
+import { type Dispatch, type SetStateAction } from "react"
 
 import type { Catalogue } from "../types/catalogue";
 
@@ -32,7 +32,7 @@ function ToggleSwitch({value, genre, catalogue, setCatalogue}: Props) {
         <label className="toggle">
             <input type="checkbox"
                     checked={isChecked}
-                    onChange={(e) => handleToggle()}/>
+                    onChange={() => handleToggle()}/>
             <span className="slider"></span>
         </label>
     )

@@ -9,8 +9,8 @@ type Props = {
 export function Cart({isVisible, cartList, deleteFromCart}: Props) {
     if(!isVisible) return null
 
-    let result = cartList.map((item, index) => {
-        return <div key={index} className="cart_game">
+    const gameList = cartList.map(item => {
+        return <div key={item.id} className="cart_game">
             <p>{item.title}</p>
             <p>{item.price}$</p>
             <button onClick={() => deleteFromCart(item.id)}>X</button>
@@ -19,7 +19,7 @@ export function Cart({isVisible, cartList, deleteFromCart}: Props) {
 
     return (
         <div className='cart_modal'>
-            {...result}
+            {...gameList}
         </div>
     )
 }

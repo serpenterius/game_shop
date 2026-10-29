@@ -18,13 +18,9 @@ import { getFilteredGames } from '../utils/getFilteredGames.ts'
 
 function HomePage() {
     const [catalogue, setCatalogue] = useState<Catalogue>({
-        // games: games,
         searchQuery: '',
         selectedGenres: [],
-        priceRange: {
-            leftPointer: 0,
-            rightPointer: 0
-        },
+        maxPrice: 0,
         cartList: []
     });
     const [modalWindows, setModalWindows] = useState<ModalWindows>({
@@ -34,15 +30,15 @@ function HomePage() {
         isCartVisible: false
     });
 
-    const filteredGames = getFilteredGames(games, catalogue.searchQuery, catalogue.selectedGenres);
+    const filteredGames = getFilteredGames(games, catalogue.searchQuery, catalogue.selectedGenres, catalogue.maxPrice);
 
-    let gamesCards = filteredGames.map(game => {
+    const gamesCards = filteredGames.map(game => {
         return <GameCard key={game.id} title={game.title} price={game.price} img={game.img} id={game.id} openModal={openModal} addToCart={addToCart} />
     })
 
     function addToCart(e: React.MouseEvent<HTMLButtonElement>, id: number) {
         e.stopPropagation();
-        if(catalogue.cartList.find(item => item.id === id)) return null
+        if(catalogue.cartList.find(item => item.id === id)) return
 
         const gameToCart: gameInfo | undefined = games.find(item => item.id === id);
         if(gameToCart !== undefined) {

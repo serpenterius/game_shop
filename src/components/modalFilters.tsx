@@ -30,9 +30,11 @@ function ModalFilters({isOpen, catalogue, setCatalogue} : Props) {
                 {...toggleSwitchers}
             </div>
             <div className="filter_prices">
-                <input type="range"
+                <p>Max price: {catalogue.maxPrice}$</p>
+                <input onChange={(e) => setCatalogue(prev => ({...prev, maxPrice: Number(e.target.value)}))} type="range"
+                        value={catalogue.maxPrice}
                         min={0}
-                        max={300}
+                        max={60}
                         step={1} />
             </div>
         </div>
