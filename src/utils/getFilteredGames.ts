@@ -5,7 +5,8 @@ export function getFilteredGames(games: gameInfo[], searchQuery: string, selecte
     let gamesList: gameInfo[] = games;
 
     if(searchQuery.trim()) {
-        gamesList = gamesList.filter(item => (item.title.toLowerCase()).startsWith(searchQuery.toLowerCase()) === true);            
+        // gamesList = gamesList.filter(item => (item.title.toLowerCase()).startsWith(searchQuery.toLowerCase()) === true);
+        gamesList = gamesList.filter(game => (game.title.toLowerCase()).includes(searchQuery.toLowerCase()));
     }
 
     if(selectedGenres.length > 0) {

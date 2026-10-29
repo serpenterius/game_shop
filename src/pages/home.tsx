@@ -18,7 +18,7 @@ import { getFilteredGames } from '../utils/getFilteredGames.ts'
 
 function HomePage() {
     const [catalogue, setCatalogue] = useState<Catalogue>({
-        games: games,
+        // games: games,
         searchQuery: '',
         selectedGenres: [],
         priceRange: {
@@ -34,7 +34,7 @@ function HomePage() {
         isCartVisible: false
     });
 
-    const filteredGames = getFilteredGames(catalogue.games, catalogue.searchQuery, catalogue.selectedGenres);
+    const filteredGames = getFilteredGames(games, catalogue.searchQuery, catalogue.selectedGenres);
 
     let gamesCards = filteredGames.map(game => {
         return <GameCard key={game.id} title={game.title} price={game.price} img={game.img} id={game.id} openModal={openModal} addToCart={addToCart} />
@@ -42,6 +42,8 @@ function HomePage() {
 
     function addToCart(e: React.MouseEvent<HTMLButtonElement>, id: number) {
         e.stopPropagation();
+        if(catalogue.cartList.find(item => item.id === id)) return null
+
         const gameToCart: gameInfo | undefined = games.find(item => item.id === id);
         if(gameToCart !== undefined) {
             const result: gameInfo[] = [...catalogue.cartList, gameToCart];
@@ -55,7 +57,7 @@ function HomePage() {
     }
 
     function openModal(id: number) {
-        const game = (catalogue.games).find(game => game.id === id);
+        const game = games.find(game => game.id === id);
         if(game) {
             setModalWindows({
                 ...modalWindows,
@@ -97,25 +99,9 @@ function HomePage() {
             </div>
             
 
-            <ModalPage isOpen={modalWindows.isGameCardVisible} gameInfo={modalWindows.modalGameInfo} closeModal={closeModal} />
+            <ModalPage isOpen={modalWindows.isGameCardVisible} gameInfo={modalWindows.modalGameInfo} closeModal={closeModal} addToCart={addToCart} />
         </div>
     )
 }
 
 export default HomePage
-
-
-// нужно, что бы при наведениее на filters запускалась логика "Если курсор указывает на кнопку filter или окно с фильтрами - не убирать окно с фильтрами". --- СДЕЛАНО (ИЗМЕНЕНО: фильтр открывается по нажатию на кнопку.)
-
-// нужно сделать переключаемые ползунки жанров в окне фильтров --- СДЕЛАНО
-
-// !!! нужно доверстать окно жанров, что бы выглядело приятно
-
-// нужно сделать в окне фильтров раздел с ценами.
-
-// нужно сделать модульную логику фильтрации по имени, жанрам и цене
-
-// При нажатии на Buy, и на саму карточку сделать разную логику.
-
-
-// Переделать импорт обложек

@@ -5,10 +5,11 @@ import type { gameInfo } from '../types/gameInfo';
 type Props = {
     isOpen: boolean,
     gameInfo: gameInfo | null,
-    closeModal: (e: React.MouseEvent) => void
+    closeModal: (e: React.MouseEvent) => void,
+    addToCart: (e: React.MouseEvent<HTMLButtonElement>, id: number) => void
 }
 
-function ModalPage({isOpen, gameInfo, closeModal}: Props) {
+function ModalPage({isOpen, gameInfo, closeModal, addToCart}: Props) {
 
     if(!isOpen) return
 
@@ -23,7 +24,7 @@ function ModalPage({isOpen, gameInfo, closeModal}: Props) {
                     <p>{gameInfo!.description}</p>
                     <div className="modal_page_commercial">
                         <p>{gameInfo!.price}$</p>
-                        <button>Add to cart</button>
+                        <button onClick={(e) => addToCart(e, gameInfo!.id)}>Add to cart</button>
                     </div>
                 </div>
             </div>

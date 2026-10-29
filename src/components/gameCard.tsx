@@ -11,7 +11,6 @@ type Props = {
 
 function GameCard({title, price, img, id, openModal, addToCart}: Props) {
 
-
     return (
         <div onClick={() => openModal(id)} className="game_card">
             <img src={img} alt="" />
