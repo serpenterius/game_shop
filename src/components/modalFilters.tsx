@@ -6,6 +6,8 @@ import ToggleSwitch from './toggleSwitch'
 
 import type { Catalogue } from '../types/catalogue'
 
+import { MAX_PRICE } from '../data/games'
+
 type Props = {
     isOpen: boolean,
     catalogue: Catalogue,
@@ -34,7 +36,7 @@ function ModalFilters({isOpen, catalogue, setCatalogue} : Props) {
                 <input onChange={(e) => setCatalogue(prev => ({...prev, maxPrice: Number(e.target.value)}))} type="range"
                         value={catalogue.maxPrice}
                         min={0}
-                        max={60}
+                        max={MAX_PRICE}
                         step={1} />
             </div>
         </div>

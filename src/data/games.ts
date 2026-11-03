@@ -721,3 +721,6 @@ export const games = [
     img: Limbo
   }
 ];
+
+export const MAX_PRICE = Math.ceil(Math.max(...games.map(game => game.price)));
+export const PAGES = Math.ceil(games.length / 9);

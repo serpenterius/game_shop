@@ -32,7 +32,7 @@ function ToggleSwitch({value, genre, catalogue, setCatalogue}: Props) {
         <label className="toggle">
             <input type="checkbox"
                     checked={isChecked}
-                    onChange={() => handleToggle()}/>
+                    onChange={handleToggle}/>
             <span className="slider"></span>
         </label>
     )

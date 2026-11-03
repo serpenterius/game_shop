@@ -2,10 +2,11 @@ import { useState } from 'react'
 
 import '../css/style.css'
 
-import GameCard from '../components/gameCard'
+import GamesList from '../components/GamesList.tsx'
 import ModalPage from '../components/modalPage.tsx'
 import ModalFilters from '../components/modalFilters.tsx'
-import { Cart } from '../components/cart.tsx'
+import Cart from '../components/cart.tsx'
+
 
 import { games } from '../data/games.ts'
 
@@ -13,15 +14,19 @@ import type { gameInfo } from '../types/gameInfo.ts'
 import type { Catalogue } from '../types/catalogue.ts'
 import type { ModalWindows } from '../types/modalWindows.ts'
 
-import { getFilteredGames } from '../utils/getFilteredGames.ts'
+import { pagination } from '../utils/pagination.ts'
 
+import { MAX_PRICE } from '../data/games.ts'
+import { PAGES } from '../data/games.ts'
 
 function HomePage() {
     const [catalogue, setCatalogue] = useState<Catalogue>({
+        renderedGames: pagination(games, PAGES),
         searchQuery: '',
         selectedGenres: [],
-        maxPrice: 0,
-        cartList: []
+        maxPrice: MAX_PRICE,
+        cartList: [],
+        selectedPage: 1
     });
     const [modalWindows, setModalWindows] = useState<ModalWindows>({
         modalGameInfo: null,
@@ -30,11 +35,8 @@ function HomePage() {
         isCartVisible: false
     });
 
-    const filteredGames = getFilteredGames(games, catalogue.searchQuery, catalogue.selectedGenres, catalogue.maxPrice);
-
-    const gamesCards = filteredGames.map(game => {
-        return <GameCard key={game.id} title={game.title} price={game.price} img={game.img} id={game.id} openModal={openModal} addToCart={addToCart} />
-    })
+    // Добавить фильтрацию в рендер.
+    // let filteredGames = getFilteredGames(games, catalogue.searchQuery, catalogue.selectedGenres, catalogue.maxPrice);
 
     function addToCart(e: React.MouseEvent<HTMLButtonElement>, id: number) {
         e.stopPropagation();
@@ -76,7 +78,7 @@ function HomePage() {
     return (
         <div className='wrapper'>
             <div className="nav">
-                <h1>Game Store</h1>
+                <h1>Auflix</h1>
                 <button onClick={() => setModalWindows({...modalWindows, isFiltersVisible: false, isCartVisible: !modalWindows.isCartVisible})} className='cart'>Cart</button>
 
                 <Cart isVisible={modalWindows.isCartVisible} cartList={catalogue.cartList} deleteFromCart={deleteFromCart} />
@@ -91,9 +93,17 @@ function HomePage() {
             </div>
 
             <div className="games">
-                {...gamesCards}
+                {/* {...gamesCards} */}
+                <GamesList games={catalogue.renderedGames} openModal={openModal} addToCart={addToCart} />
             </div>
             
+            <div className="pages_buttons">
+                <button className={catalogue.selectedPage === 1 ? 'page_button' : 'page_button visible'} 
+                        onClick={() => setCatalogue(prev => ({...prev, renderedGames: pagination(games, PAGES, catalogue.selectedPage - 1), selectedPage: catalogue.selectedPage - 1}))}>Prev</button>
+                <p>{catalogue.selectedPage} из {PAGES}</p>
+                <button className={catalogue.selectedPage === PAGES ? 'page_button' : 'page_button visible'} 
+                        onClick={() => setCatalogue(prev => ({...prev, renderedGames: pagination(games, PAGES, catalogue.selectedPage + 1), selectedPage: catalogue.selectedPage + 1}))}>Next</button>
+            </div>
 
             <ModalPage isOpen={modalWindows.isGameCardVisible} gameInfo={modalWindows.modalGameInfo} closeModal={closeModal} addToCart={addToCart} />
         </div>
@@ -101,3 +111,4 @@ function HomePage() {
 }
 
 export default HomePage
+

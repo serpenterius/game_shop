@@ -6,7 +6,7 @@ type Props = {
     deleteFromCart: (id: number) => void
 }
 
-export function Cart({isVisible, cartList, deleteFromCart}: Props) {
+function Cart({isVisible, cartList, deleteFromCart}: Props) {
     if(!isVisible) return null
 
     const gameList = cartList.map(item => {
@@ -23,3 +23,5 @@ export function Cart({isVisible, cartList, deleteFromCart}: Props) {
         </div>
     )
 }
+
+export default Cart
