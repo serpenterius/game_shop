@@ -1,18 +1,9 @@
 import type { gameInfo } from "../types/gameInfo";
 
-// Надо сделать пагинацию(9 игр на одной странице, количество страниц автоматически вычисляется.)
-// Пересмотреть аргумент опции, нужен ли он. Стартовый рендер из-за опции сложно делать.
-// Как вариант - сделать функцию чистой, возвращающую массив, и записывать это в useState. Идея неплохая, как по мне. Однако вопрос - как перезаписывать страницу, в таком случае.
-
-// Происходит странное поведение.
-// Первоначальный рендер - происходит нормально.
-// При переключении на 2 страницу происходит 2 вызова функции пагинации, для 1 и 2 страницы. Для 2 страницы выдаёт пустой список, почему-то.
-
-
-export function pagination(games: gameInfo[], PAGES: number, selectedPage: number = 1) {
-    const startIndex = (selectedPage * PAGES) - PAGES;
-    const pageContent = games.slice(startIndex, startIndex + 9);
-    console.log(pageContent);
+export function pagination(games: gameInfo[], GAMES_ON_PAGE: number, selectedPage: number = 1) {
+    const startIndex = (selectedPage * GAMES_ON_PAGE) - GAMES_ON_PAGE;
+    const pageContent = games.slice(startIndex, selectedPage * GAMES_ON_PAGE);
+    console.log(selectedPage);
     return pageContent
 
 }

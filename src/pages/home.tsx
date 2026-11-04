@@ -6,6 +6,7 @@ import GamesList from '../components/GamesList.tsx'
 import ModalPage from '../components/modalPage.tsx'
 import ModalFilters from '../components/modalFilters.tsx'
 import Cart from '../components/cart.tsx'
+import PagesButtons from '../components/PagesButtons.tsx'
 
 
 import { games } from '../data/games.ts'
@@ -14,14 +15,15 @@ import type { gameInfo } from '../types/gameInfo.ts'
 import type { Catalogue } from '../types/catalogue.ts'
 import type { ModalWindows } from '../types/modalWindows.ts'
 
+import { getFilteredGames } from '../utils/getFilteredGames.ts'
 import { pagination } from '../utils/pagination.ts'
 
-import { MAX_PRICE } from '../data/games.ts'
-import { PAGES } from '../data/games.ts'
+import { MAX_PRICE } from '../data/configs.ts'
+import { GAMES_ON_PAGE } from '../data/configs.ts'
+
 
 function HomePage() {
     const [catalogue, setCatalogue] = useState<Catalogue>({
-        renderedGames: pagination(games, PAGES),
         searchQuery: '',
         selectedGenres: [],
         maxPrice: MAX_PRICE,
@@ -35,8 +37,10 @@ function HomePage() {
         isCartVisible: false
     });
 
-    // Добавить фильтрацию в рендер.
-    // let filteredGames = getFilteredGames(games, catalogue.searchQuery, catalogue.selectedGenres, catalogue.maxPrice);
+    let filteredGames = getFilteredGames(games, catalogue.searchQuery, catalogue.selectedGenres, catalogue.maxPrice);
+    let paginationGames = pagination(filteredGames, GAMES_ON_PAGE, catalogue.selectedPage)
+    
+
 
     function addToCart(e: React.MouseEvent<HTMLButtonElement>, id: number) {
         e.stopPropagation();
@@ -86,7 +90,7 @@ function HomePage() {
 
             <div className="search">
                 {/* <input onChange={(e) => searchGame(e, games)} type="text" /> */}
-                <input value={catalogue.searchQuery} onChange={(e) => setCatalogue({...catalogue, searchQuery: e.target.value})} type="text" />
+                <input value={catalogue.searchQuery} onChange={(e) => setCatalogue(prev => ({...prev, searchQuery: e.target.value, selectedPage: 1}))} type="text" />
                 <button onClick={() => setModalWindows({...modalWindows, isFiltersVisible: !modalWindows.isFiltersVisible})}>Filters</button>
 
                 <ModalFilters isOpen={modalWindows.isFiltersVisible} catalogue={catalogue} setCatalogue={setCatalogue} />
@@ -94,15 +98,11 @@ function HomePage() {
 
             <div className="games">
                 {/* {...gamesCards} */}
-                <GamesList games={catalogue.renderedGames} openModal={openModal} addToCart={addToCart} />
+                <GamesList games={paginationGames} openModal={openModal} addToCart={addToCart} />
             </div>
             
             <div className="pages_buttons">
-                <button className={catalogue.selectedPage === 1 ? 'page_button' : 'page_button visible'} 
-                        onClick={() => setCatalogue(prev => ({...prev, renderedGames: pagination(games, PAGES, catalogue.selectedPage - 1), selectedPage: catalogue.selectedPage - 1}))}>Prev</button>
-                <p>{catalogue.selectedPage} из {PAGES}</p>
-                <button className={catalogue.selectedPage === PAGES ? 'page_button' : 'page_button visible'} 
-                        onClick={() => setCatalogue(prev => ({...prev, renderedGames: pagination(games, PAGES, catalogue.selectedPage + 1), selectedPage: catalogue.selectedPage + 1}))}>Next</button>
+                <PagesButtons games={filteredGames} GAMES_ON_PAGE={GAMES_ON_PAGE} currentPage={catalogue.selectedPage} setCatalogue={setCatalogue} />
             </div>
 
             <ModalPage isOpen={modalWindows.isGameCardVisible} gameInfo={modalWindows.modalGameInfo} closeModal={closeModal} addToCart={addToCart} />
@@ -112,3 +112,16 @@ function HomePage() {
 
 export default HomePage
 
+// Пересмотреть вычисление PAGES.
+// Переделал рендер игр на страницу. Теперь пагинация + работающие фильтры + поиск.
+// Страницы теперь рассчитываются автоматически.
+// Сделал переключение страниц
+// Контент показывается на всех страницах нормально.
+
+// Остановился на том, что сделал пагинацию + фильтры + поиск, всё работает нормально.
+
+
+
+// Поправить стили у div с кнопками страниц, сделать fixed вниз.
+
+// Обработать сценарий: пользователь ввёл белиберду, 0 страниц найденных игр, 1 из 0 страниц.

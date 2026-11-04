@@ -6,7 +6,7 @@ import ToggleSwitch from './toggleSwitch'
 
 import type { Catalogue } from '../types/catalogue'
 
-import { MAX_PRICE } from '../data/games'
+import { MAX_PRICE } from '../data/configs'
 
 type Props = {
     isOpen: boolean,
